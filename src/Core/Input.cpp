@@ -1,14 +1,6 @@
 #pragma once
-#include <GL/glut.h>
-#include "Input.h"
-
-#ifdef MACOSX
-  #include <GLUT/glut.h>
-#else
-  #include <GL/glut.h>
-#endif
-
 #include <iostream>
+#include "Input.h"
 #include "Engine.h"
 
 bool Input::keys[NUMBER_OF_KEYS];

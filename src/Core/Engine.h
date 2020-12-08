@@ -4,7 +4,9 @@
 #define WIDTH 640
 #define HEIGHT 480
 
-#pragma once
+#include "../include.h"
+#include "../Boids/Boid.h"
+
 
 class Engine
 {
@@ -38,6 +40,9 @@ class Engine
         int width, height;
         int frameCount;
         unsigned long long timeSinceLastFPScheck, currentTime;
+
+        Boid *boid;
+
         //The Engine instance
         static Engine *engine;
         //There can only be one Engine instance, thus the constructor is private
