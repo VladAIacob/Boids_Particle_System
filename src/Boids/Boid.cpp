@@ -3,6 +3,8 @@
 #include "../Core/Input.h"
 #include <iostream>
 
+bool Boid::colorChanged = false;
+
 const GLfloat Boid::shapeBufferData[] = {
 	0.1,0.1,0.1,    -0.1,0.1,0.1,    -0.1,-0.1,0.1,    0.1,-0.1,0.1,        // v0-v0.1-v2-v3
 	0.1,0.1,0.1,     0.1,-0.1,0.1,    0.1,-0.1,-0.1,   0.1,0.1,-0.1,        // v0-v3-v4-v5
@@ -26,8 +28,27 @@ Boid::Boid()
 
 }
 
+void Boid::changeColor()
+{
+	if(!colorChanged && Input::isPressed(C))
+	{
+		for(int index = 0; index < MAX_PARTICLES; index++)
+		{
+			particles[index]->colour = glm::vec4((GLfloat)(rand()%255 / 255.0),
+												 (GLfloat)(rand()%255 / 255.0),
+												 (GLfloat)(rand()%255 / 255.0),
+												 (GLfloat)1);
+		}
+		colorChanged = true;	
+	}
+	if(!Input::isPressed(C))
+		colorChanged = false;
+}
+
 void Boid::update()
 {
+	changeColor();
+	
 	for(int index = 0; index < MAX_PARTICLES; index++)
 	{
 		particles[index]->addNeighbour(particles[index]);

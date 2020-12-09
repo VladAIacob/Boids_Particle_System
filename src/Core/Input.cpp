@@ -19,6 +19,7 @@ void Input::keyDown(unsigned char key, int x, int y)
         case 'a': keys[A] = true; break;
         case 's': keys[S] = true; break;
         case 'd': keys[D] = true; break;
+        case 'c': keys[C] = true; break;
         case 27 : exit(EXIT_SUCCESS);
         case 32 : keys[SPACE] = true; break;
         default: break;
@@ -33,6 +34,7 @@ void Input::keyUp(unsigned char key, int x, int y)
         case 'a': keys[A] = false; break;
         case 's': keys[S] = false; break;
         case 'd': keys[D] = false; break;
+        case 'c': keys[C] = false; break;
         case 32 : keys[SPACE] = false; break;
         default: break;
     }

@@ -4,8 +4,13 @@
 #include "../Core/Input.h"
 
 Particle::Particle()
-:position((GLfloat)(rand() % (RIGHT - LEFT) + LEFT), (GLfloat)(rand() % (TOP - BOTTOM) + BOTTOM), (GLfloat)(rand() % (RIGHT - LEFT) + LEFT)),
-colour((GLfloat)(rand()%255 / 255.0), (GLfloat)(rand()%255 / 255.0), (GLfloat)(rand()%255 / 255.0), (GLfloat)1)
+:position((GLfloat)(rand() % (RIGHT - LEFT) + LEFT),
+		  (GLfloat)(rand() % (TOP - BOTTOM) + BOTTOM),
+		  (GLfloat)(rand() % (RIGHT - LEFT) + LEFT)),
+colour((GLfloat)(rand()%255 / 255.0),
+       (GLfloat)(rand()%255 / 255.0),
+       (GLfloat)(rand()%255 / 255.0),
+       (GLfloat)1)
 {	
 	velocity = glm::vec3((GLfloat)(rand()%9),(GLfloat)(rand()%9),(GLfloat)(rand()%9));
 	velocity -= glm::vec3(4, 4, 4);
@@ -38,11 +43,17 @@ void Particle::update()
 		acceleration += alignment() * PARTICLE_ALIGNMENT;
 		acceleration += separation() * PARTICLE_SEPARATION;
 		acceleration += cohesion() * PARTICLE_COHESION;
+		if(Input::isPressed(S))
+			acceleration += glm::vec3(0, -1, 0);
+		if(Input::isPressed(W))
+			acceleration += glm::vec3(0, 1, 0);
 	}
 
 	velocity += acceleration;
-	velocity = glm::normalize(velocity) * PARTICLE_SPEED;
-
+	if(Input::isPressed(SPACE))
+		velocity = glm::normalize(velocity) * PARTICLE_SPEEDBOOST;
+	else
+		velocity = glm::normalize(velocity) * PARTICLE_SPEED;
 	position = bounds(position + velocity);
 	//Prepare for next frame
 	neighbours.clear();
@@ -86,7 +97,6 @@ glm::vec3 Particle::alignment()
 
 	for(int index = 0; index < neighbours.size(); index++)
 		averageDirection += neighbours[index]->velocity;
-	//averageDirection /= neighbours.size();
 
 	return averageDirection - velocity;
 }

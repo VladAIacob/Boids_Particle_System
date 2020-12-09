@@ -3,6 +3,7 @@
 
 #define ROTATION 1
 
+//The Keys definitions
 enum Keys
 {
     W,
@@ -10,12 +11,14 @@ enum Keys
     S,
     D,
     SPACE,
+    C,
     NUMBER_OF_KEYS
 };
 
 class Input
 {
     public:
+    	//The rotation of the camera (TODO: To be moved in the camera class)
         static double rotation;
         //Return if the key is pressed
         static bool isPressed(Keys key);

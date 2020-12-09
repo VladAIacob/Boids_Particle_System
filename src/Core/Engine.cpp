@@ -90,6 +90,7 @@ void Engine::mainLoop()
     update();
     display();
 
+    //Calculating and displaying frames per second
     engine->frameCount++;
     engine->currentTime = glutGet(GLUT_ELAPSED_TIME);
     if(engine->currentTime - engine->timeSinceLastFPScheck > 1000)

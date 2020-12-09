@@ -11,7 +11,7 @@
 class Engine
 {
     public:
-
+    	//Helper methods to get the window's dimensions
         int getWidth();
         int getHeight();
 
@@ -41,6 +41,7 @@ class Engine
         int frameCount;
         unsigned long long timeSinceLastFPScheck, currentTime;
 
+        //The boid grouping
         Boid *boid;
 
         //The Engine instance

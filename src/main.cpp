@@ -9,7 +9,9 @@
 //Creating and starting the engine.
 int main(int argc, char *argv[])
 {
+	//Initialize random
 	srand (time(NULL));
+	//Try to initialize the engine and create a window 
 	try
 	{
     	Engine::init(argc, argv);
@@ -21,5 +23,6 @@ int main(int argc, char *argv[])
     {
     	std::cout << e.what() << std::endl;
     }
+    
     return EXIT_SUCCESS;
 }
