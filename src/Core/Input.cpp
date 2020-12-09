@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Engine.h"
 
+double Input::rotation = 0;
 bool Input::keys[NUMBER_OF_KEYS];
 
 bool Input::isPressed(Keys key)

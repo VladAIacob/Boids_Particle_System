@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Engine.h"
+#include "Input.h"
 
 Engine *Engine::engine = NULL;
 
@@ -64,66 +65,21 @@ void Engine::create(const char *name)
     glutReshapeFunc(Engine::resize);
     glutDisplayFunc(Engine::mainLoop);
     glutIdleFunc(Engine::idle);
+    glutKeyboardFunc(Input::keyDown);
+    glutKeyboardUpFunc(Input::keyUp);
 }
 
 void Engine::update()
 { 
 	engine->boid->update();
+
+	if(Input::isPressed(A)) Input::rotation -= ROTATION;
+	if(Input::isPressed(D)) Input::rotation += ROTATION;
 }
 
 void Engine::display()
 {
     engine->boid->draw();
-
-    glLoadIdentity();
-    glTranslatef(0,0,-10);
-    glRotatef(30, 0, 1, 0);
-    glColor3f(0.0f, 1.0f, 1.0f);
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glBegin(GL_LINES);
-    
-	    glVertex3i(LEFT, BOTTOM, LEFT);
-	    glVertex3i(LEFT, BOTTOM, RIGHT);
-
-	    glVertex3i(LEFT, BOTTOM, RIGHT);
-	    glVertex3i(RIGHT, BOTTOM, RIGHT);
-
-	    glVertex3i(RIGHT, BOTTOM, RIGHT);
-	    glVertex3i(RIGHT, BOTTOM, LEFT);
-
-	    glVertex3i(RIGHT, BOTTOM, LEFT);
-	    glVertex3i(LEFT, BOTTOM, LEFT);
-
-
-	    glVertex3i(LEFT, TOP, LEFT);
-	    glVertex3i(LEFT, TOP, RIGHT);
-
-	    glVertex3i(LEFT, TOP, RIGHT);
-	    glVertex3i(RIGHT, TOP, RIGHT);
-
-	    glVertex3i(RIGHT, TOP, RIGHT);
-	    glVertex3i(RIGHT, TOP, LEFT);
-
-	    glVertex3i(RIGHT, TOP, LEFT);
-	    glVertex3i(LEFT, TOP, LEFT);
-
-
-
-	    glVertex3i(LEFT, BOTTOM, LEFT);
-	    glVertex3i(LEFT, TOP, LEFT);
-
-	    glVertex3i(LEFT, BOTTOM, RIGHT);
-	    glVertex3i(LEFT, TOP, RIGHT);
-
-	    glVertex3i(RIGHT, BOTTOM, RIGHT);
-	    glVertex3i(RIGHT, TOP, RIGHT);
-
-	    glVertex3i(RIGHT, BOTTOM, LEFT);
-	    glVertex3i(RIGHT, TOP, LEFT);
-
-    glEnd();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Engine::mainLoop()
@@ -169,5 +125,4 @@ void Engine::resize(int width, int height)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(0, 0, -10.0f);
-    glRotatef(30, 1, 0, 0);
 }

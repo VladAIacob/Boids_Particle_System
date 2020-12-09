@@ -1,6 +1,8 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#define ROTATION 1
+
 enum Keys
 {
     W,
@@ -14,6 +16,7 @@ enum Keys
 class Input
 {
     public:
+        static double rotation;
         //Return if the key is pressed
         static bool isPressed(Keys key);
         //Handle for key down event

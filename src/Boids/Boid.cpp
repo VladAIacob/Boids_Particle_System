@@ -1,22 +1,22 @@
 #include "../include.h"
 #include "Boid.h"
+#include "../Core/Input.h"
 #include <iostream>
-#include <glm/gtx/string_cast.hpp>
 
 const GLfloat Boid::shapeBufferData[] = {
-	1,1,1,    -1,1,1,    -1,-1,1,    1,-1,1,        // v0-v1-v2-v3
-	1,1,1,     1,-1,1,    1,-1,-1,   1,1,-1,        // v0-v3-v4-v5
-	1,1,1,     1,1,-1,   -1,1,-1,   -1,1,1,         // v0-v5-v6-v1
-   -1,1,1,    -1,1,-1,   -1,-1,-1,  -1,-1,1,		// v1-v6-v7-v2
-   -1,-1,-1,   1,-1,-1,   1,-1,1,   -1,-1,1,        // v7-v4-v3-v2
-    1,-1,-1,  -1,-1,-1,  -1,1,-1,    1,1,-1			// v4-v7-v6-v5
+	0.1,0.1,0.1,    -0.1,0.1,0.1,    -0.1,-0.1,0.1,    0.1,-0.1,0.1,        // v0-v0.1-v2-v3
+	0.1,0.1,0.1,     0.1,-0.1,0.1,    0.1,-0.1,-0.1,   0.1,0.1,-0.1,        // v0-v3-v4-v5
+	0.1,0.1,0.1,     0.1,0.1,-0.1,   -0.1,0.1,-0.1,   -0.1,0.1,0.1,         // v0-v5-v6-v0.1
+   -0.1,0.1,0.1,    -0.1,0.1,-0.1,   -0.1,-0.1,-0.1,  -0.1,-0.1,0.1,		// v0.1-v6-v7-v2
+   -0.1,-0.1,-0.1,   0.1,-0.1,-0.1,   0.1,-0.1,0.1,   -0.1,-0.1,0.1,        // v7-v4-v3-v2
+    0.1,-0.1,-0.1,  -0.1,-0.1,-0.1,  -0.1,0.1,-0.1,    0.1,0.1,-0.1			// v4-v7-v6-v5
 };
 
 Boid::Boid()
 {
 	for(int index = 0; index < MAX_PARTICLES; index++)
 	{
-		particles.push_back(Particle());
+		particles.push_back(new Particle());
 	}
 
 	//Shared cube shape of particles
@@ -30,8 +30,74 @@ void Boid::update()
 {
 	for(int index = 0; index < MAX_PARTICLES; index++)
 	{
-		particles[index].update();
+		particles[index]->addNeighbour(particles[index]);
+		for(int neighbour = index + 1; neighbour < MAX_PARTICLES; neighbour++)
+		{
+			if(glm::distance(particles[index]->position, particles[neighbour]->position) <= PARTICLE_SIGHT)
+			{
+				particles[index]->addNeighbour(particles[neighbour]);
+				particles[neighbour]->addNeighbour(particles[index]);
+			}
+		}
 	}
+
+	for(int index = 0; index < MAX_PARTICLES; index++)
+	{
+		particles[index]->update();
+	}
+}
+
+void Boid::drawBound()
+{
+	glLoadIdentity();
+    glTranslatef(0,0,-10);
+    glRotatef(Input::rotation, 0, 1, 0);
+    glColor3f(0.0f, 1.0f, 1.0f);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glBegin(GL_LINES);
+    
+	    glVertex3i(LEFT, BOTTOM, LEFT);
+	    glVertex3i(LEFT, BOTTOM, RIGHT);
+
+	    glVertex3i(LEFT, BOTTOM, RIGHT);
+	    glVertex3i(RIGHT, BOTTOM, RIGHT);
+
+	    glVertex3i(RIGHT, BOTTOM, RIGHT);
+	    glVertex3i(RIGHT, BOTTOM, LEFT);
+
+	    glVertex3i(RIGHT, BOTTOM, LEFT);
+	    glVertex3i(LEFT, BOTTOM, LEFT);
+
+
+	    glVertex3i(LEFT, TOP, LEFT);
+	    glVertex3i(LEFT, TOP, RIGHT);
+
+	    glVertex3i(LEFT, TOP, RIGHT);
+	    glVertex3i(RIGHT, TOP, RIGHT);
+
+	    glVertex3i(RIGHT, TOP, RIGHT);
+	    glVertex3i(RIGHT, TOP, LEFT);
+
+	    glVertex3i(RIGHT, TOP, LEFT);
+	    glVertex3i(LEFT, TOP, LEFT);
+
+
+
+	    glVertex3i(LEFT, BOTTOM, LEFT);
+	    glVertex3i(LEFT, TOP, LEFT);
+
+	    glVertex3i(LEFT, BOTTOM, RIGHT);
+	    glVertex3i(LEFT, TOP, RIGHT);
+
+	    glVertex3i(RIGHT, BOTTOM, RIGHT);
+	    glVertex3i(RIGHT, TOP, RIGHT);
+
+	    glVertex3i(RIGHT, BOTTOM, LEFT);
+	    glVertex3i(RIGHT, TOP, LEFT);
+
+    glEnd();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Boid::draw()
@@ -41,6 +107,8 @@ void Boid::draw()
 	{
 		glLoadIdentity();
 		glTranslatef(0,0,-10);
-		particles[index].draw();
+		particles[index]->draw();
 	}
+
+	drawBound();
 }

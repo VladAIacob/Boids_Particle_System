@@ -3,10 +3,12 @@
 
 #pragma once
 #include <vector>
-#ifndef MAX_PARTICLES
-	#define MAX_PARTICLES 10
-#endif
 #include "Particle.h"
+
+#ifndef BOID_LOGIC
+    #define BOID_LOGIC
+    #define MAX_PARTICLES 1000
+#endif
 
 class Boid
 {
@@ -14,8 +16,9 @@ class Boid
         Boid();
         void update();
     	void draw();
+        void drawBound();
     private:
-    	std::vector<Particle> particles;
+    	std::vector<Particle *> particles;
 
     	GLuint shapeVertexBuffer;
         
